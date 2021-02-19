@@ -13,7 +13,7 @@ class BaseServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->baseService = new BaseServiceImpl('wxc3b80a3aaf117f5a', '6b6b51f538fcd42d74b9a28013c4efa7');
+        $this->baseService = new BaseServiceImpl('wxc3b80a3aaf117f5a', '6b6b51f538fcd42d74b9a28013c4efa7', '');
     }
 
     public function testGetAccessToken()
