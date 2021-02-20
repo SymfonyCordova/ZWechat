@@ -32,7 +32,7 @@ class LaravelServiceProvider extends ServiceProvider implements DeferrableProvid
     public function boot()
     {
         $this->publishes([
-            __DIR__.'config/zler.php' => config_path('zler.php'),
+            __DIR__.'/config/zler.php' => config_path('zler.php'),
         ]);
     }
 
