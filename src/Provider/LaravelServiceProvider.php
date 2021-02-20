@@ -10,8 +10,6 @@ use Zler\Wechat\Service\Impl\GzhServiceImpl;
 
 class LaravelServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-
-
     /**
      * Register any application services.
      *

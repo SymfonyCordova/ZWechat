@@ -10,6 +10,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Zler\Wechat\Exception\InvalidArgumentException;
 use Zler\Wechat\Service\GzhService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class Controller extends BaseController
 {
