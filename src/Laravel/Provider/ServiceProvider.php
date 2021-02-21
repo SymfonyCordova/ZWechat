@@ -20,11 +20,11 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         if($this->app->has('Zler\Biz\Context\Biz')){
             $className = 'Zler\Wechat\Provider\WechatServiceProvider';
             $this->app->make('Zler\Biz\Context\Biz')->register(new $className());
-        }else{
-            $this->app->singleton(GzhService::class, function ($app) {
-                return new GzhServiceImpl(config('zler-wechat.gzh'));
-            });
         }
+
+        $this->app->singleton(GzhService::class, function ($app) {
+            return new GzhServiceImpl(config('zler-wechat.gzh'));
+        });
     }
 
     /**
