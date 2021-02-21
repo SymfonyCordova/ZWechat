@@ -18,7 +18,7 @@ class LaravelServiceProvider extends ServiceProvider implements DeferrableProvid
     public function register()
     {
         $this->app->singleton(GzhService::class, function ($app) {
-            return new GzhServiceImpl(config('zler.gzh'));
+            return new GzhServiceImpl(config('zler-wechat.gzh'));
         });
     }
 
@@ -30,7 +30,7 @@ class LaravelServiceProvider extends ServiceProvider implements DeferrableProvid
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../../config/zler.php' => config_path('zler.php'),
+            __DIR__ . '/../../config/zler-wechat.php' => config_path('zler-wechat.php'),
         ]);
 
         $this->loadRoutesFrom(__DIR__ . '/../../routes/routes.php');
