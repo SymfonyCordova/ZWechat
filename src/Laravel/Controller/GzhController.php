@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Zler\Wechat\Controller;
+namespace Zler\Wechat\Laravel\Controller;
 
 use Illuminate\Http\Request;
 

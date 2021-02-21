@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Zler\Wechat\Controller;
+namespace Zler\Wechat\Laravel\Controller;
 
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

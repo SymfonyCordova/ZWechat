@@ -13,7 +13,7 @@ An API extension for WeChat client sdk
 - laravel install
 
   ```shell
-  php artisan vendor:publish --provider="Zler\Wechat\Provider\LaravelServiceProvider"
+  php artisan vendor:publish --provider="Zler\Wechat\Laravel\Provider\ServiceProvider"
   ```
 
   
