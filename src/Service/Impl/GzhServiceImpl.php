@@ -20,12 +20,6 @@ class GzhServiceImpl implements GzhService
         $this->appId                = $fields['app_id'];
         $this->appSecret            = $fields['app_secret'];
         $this->token                = $fields['token'];
-        $this->oauth2RedirectUrl    = $fields['oauth2_redirect_url'];
-    }
-
-    public function getOauth2RedirectUrl()
-    {
-        return $this->oauth2RedirectUrl;
     }
 
     public function checkSignature($fields)
