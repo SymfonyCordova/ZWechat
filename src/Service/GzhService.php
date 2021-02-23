@@ -15,12 +15,12 @@ interface GzhService
     const OAUTH2_ACCESS_TOKEN_URL =
         "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
 
+    const OAUTH2_USER_INFO_URL =
+        'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN';
+
 
     //const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
     const GET_USER_INFO_URL = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
-
-
-    //const OAUTH_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
 
     const GET_JST_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
 //    const PAY_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
@@ -60,12 +60,7 @@ interface GzhService
      */
     public function generateOauth2Url($redirectUri, $state="STATE");
 
-    /**
-     * 根据code获取accessToken
-     * @param $code
-     * @return mixed
-     */
-    public function getAccessTokenByCode($code);
+    public function getUserInfoByOauth2Code($code);
 
     /**
      * 获取js的tikcet的票据

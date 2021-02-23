@@ -3,7 +3,6 @@
 
 namespace Zler\Wechat\Service\Impl;
 
-
 use Zler\Wechat\Exception\AccessDeniedException;
 use Zler\Wechat\Service\GzhService;
 use Zler\Wechat\Toolkits\CurlToolkit;
@@ -36,13 +35,6 @@ class GzhServiceImpl implements GzhService
         }
     }
 
-    public function generateOauth2Url($redirectUri, $state = "STATE")
-    {
-        $url = self::GENERATE_OAUTH2_URL;
-        $url = sprintf($url, urlencode($redirectUri),$state);
-        return $url;
-    }
-
     public function getAccessToken()
     {
         $data = CurlToolkit::request('GET',sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret));
@@ -54,16 +46,42 @@ class GzhServiceImpl implements GzhService
         return $data['access_token'];
     }
 
-    public function getAccessTokenByCode($code)
+    public function generateOauth2Url($redirectUri, $state = "STATE")
+    {
+        $url = self::GENERATE_OAUTH2_URL;
+        $url = sprintf($url, urlencode($redirectUri),$state);
+        return $url;
+    }
+
+    public function getUserInfoByOauth2Code($code)
+    {
+        $oauth2AccessTokenAndOpenId = $this->getOauth2AccessTokenAndOpenIdByCode($code);
+
+        return $this->getUserInfoByAccessTokenAndOpenId($oauth2AccessTokenAndOpenId['access_token'], $oauth2AccessTokenAndOpenId['openid']);
+    }
+
+    private function getOauth2AccessTokenAndOpenIdByCode($code)
     {
         $url = sprintf(self::OAUTH2_ACCESS_TOKEN_URL,$this->appId, $this->appSecret, $code);
         $data = CurlToolkit::request('GET', $url);
 
-        if(!isset($data['access_token'])){
-            throw new AccessDeniedException("get openid accessToken by code fail");
+        if(!isset($data['access_token']) || !isset($data['openid'])){
+            throw new AccessDeniedException("get accessToken|openid by code fail");
         }
 
-        return $data['access_token'];
+        return $data;
+    }
+
+    private function getUserInfoByAccessTokenAndOpenId($accessToken, $openId)
+    {
+        $url = sprintf(self::OAUTH2_USER_INFO_URL, $accessToken, $openId);
+        $data = CurlToolkit::request('GET', $url);
+
+        if(!isset($data['nickname'])){
+            throw new AccessDeniedException("get user info by oauth2 fail");
+        }
+
+        return $data;
     }
 
     public function getJsTikcet()
