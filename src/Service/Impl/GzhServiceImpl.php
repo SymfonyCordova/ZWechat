@@ -13,7 +13,6 @@ class GzhServiceImpl implements GzhService
     protected $appId;
     protected $appSecret;
     protected $token;
-    protected $oauth2RedirectUrl;
 
     public function __construct($fields)
     {
