@@ -36,12 +36,31 @@ class GzhServiceImpl implements GzhService
         }
     }
 
+    public function generateOauth2Url($redirectUri, $state = "STATE")
+    {
+        $url = self::GENERATE_OAUTH2_URL;
+        $url = sprintf($url, urlencode($redirectUri),$state);
+        return $url;
+    }
+
     public function getAccessToken()
     {
         $data = CurlToolkit::request('GET',sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret));
 
         if(!isset($data['access_token'])){
-            throw new AccessDeniedException("get access token fail");
+            throw new AccessDeniedException("get openid accessToken fail");
+        }
+
+        return $data['access_token'];
+    }
+
+    public function getAccessTokenByCode($code)
+    {
+        $url = sprintf(self::OAUTH2_ACCESS_TOKEN_URL,$this->appId, $this->appSecret, $code);
+        $data = CurlToolkit::request('GET', $url);
+
+        if(!isset($data['access_token'])){
+            throw new AccessDeniedException("get openid accessToken by code fail");
         }
 
         return $data['access_token'];
