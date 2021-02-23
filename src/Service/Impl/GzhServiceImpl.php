@@ -13,12 +13,19 @@ class GzhServiceImpl implements GzhService
     protected $appId;
     protected $appSecret;
     protected $token;
+    protected $oauth2RedirectUrl;
 
     public function __construct($fields)
     {
-        $this->appId = $fields['app_id'];
-        $this->appSecret = $fields['app_secret'];
-        $this->token = $fields['token'];
+        $this->appId                = $fields['app_id'];
+        $this->appSecret            = $fields['app_secret'];
+        $this->token                = $fields['token'];
+        $this->oauth2RedirectUrl    = $fields['oauth2_redirect_url'];
+    }
+
+    public function getOauth2RedirectUrl()
+    {
+        return $this->oauth2RedirectUrl;
     }
 
     public function checkSignature($fields)
@@ -46,10 +53,17 @@ class GzhServiceImpl implements GzhService
         return $data['access_token'];
     }
 
+    public function getUserInfo($openId)
+    {
+        $accessToken = $this->getAccessToKen();
+        $url = sprintf(self::GET_USER_INFO_URL, $accessToken, $openId);
+        return CurlToolkit::request('GET', $url);
+    }
+
     public function generateOauth2Url($redirectUri, $state = "STATE")
     {
         $url = self::GENERATE_OAUTH2_URL;
-        $url = sprintf($url, urlencode($redirectUri),$state);
+        $url = sprintf($url, urlencode($redirectUri), $state);
         return $url;
     }
 
@@ -116,12 +130,5 @@ class GzhServiceImpl implements GzhService
             'nonceStr'  => $nonceStr,
             'signature' => $signature,
         );
-    }
-
-    public function getUserInfo($openId)
-    {
-        $accessToken = $this->getAccessToKen();
-        $url = sprintf(self::GET_USER_INFO_URL, $accessToken, $openId);
-        return CurlToolkit::request('GET', $url);
     }
 }

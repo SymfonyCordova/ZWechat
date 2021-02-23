@@ -7,5 +7,6 @@ return [
         'app_id' => env('gzh_app_id', ''),
         'app_secret' => env('gzh_app_secret', ''),
         'token' => env('gzh_token', ''),
+        'oauth2_redirect_url' => env('gzh_redirect_url', ''),
     ]
 ];
