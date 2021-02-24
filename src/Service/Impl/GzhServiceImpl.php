@@ -44,7 +44,9 @@ class GzhServiceImpl implements GzhService
         $data = json_decode(file_get_contents($this->accessTokenPath), true);
 
         if($data['access_token'] < time()) {
-            $wx = CurlToolkit::request('GET', sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret));
+            $wx = CurlToolkit::request('GET',
+                                sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret),
+                                array());
 
             if (!isset($wx['access_token'])) {
                 throw new AccessDeniedException("get openid accessToken fail");
@@ -66,8 +68,10 @@ class GzhServiceImpl implements GzhService
     public function getUserInfo($openId)
     {
         $accessToken = $this->getAccessToKen();
+
         $url = sprintf(self::GET_USER_INFO_URL, $accessToken, $openId);
-        return CurlToolkit::request('GET', $url);
+
+        return CurlToolkit::request('GET', $url, array());
     }
 
     public function generateOauth2Url($redirectUri, $state = "STATE")
@@ -87,7 +91,8 @@ class GzhServiceImpl implements GzhService
     private function getOauth2AccessTokenAndOpenIdByCode($code)
     {
         $url = sprintf(self::OAUTH2_ACCESS_TOKEN_URL,$this->appId, $this->appSecret, $code);
-        $data = CurlToolkit::request('GET', $url);
+
+        $data = CurlToolkit::request('GET', $url, array());
 
         if(!isset($data['access_token']) || !isset($data['openid'])){
             throw new AccessDeniedException("get accessToken|openid by code fail");
@@ -99,7 +104,8 @@ class GzhServiceImpl implements GzhService
     private function getUserInfoByAccessTokenAndOpenId($accessToken, $openId)
     {
         $url = sprintf(self::OAUTH2_USER_INFO_URL, $accessToken, $openId);
-        $data = CurlToolkit::request('GET', $url);
+
+        $data = CurlToolkit::request('GET', $url, array());
 
         if(!isset($data['nickname'])){
             throw new AccessDeniedException("get user info by oauth2 fail");
@@ -114,7 +120,8 @@ class GzhServiceImpl implements GzhService
 
         $url = sprintf(self::GET_JST_TICKET_URL, $accessToken);
 
-        $data = CurlToolkit::request('GET', $url);
+        $data = CurlToolkit::request('GET', $url, array());
+
         if(!isset($data['errcode'])){
             throw new AccessDeniedException("get js tikcet fail no errcode");
         }
@@ -257,7 +264,9 @@ class GzhServiceImpl implements GzhService
     public function createMenu($menu)
     {
         $accessToken = $this->getAccessToKen();
+
         $url = sprintf(self::CREATE_MENU_URL, $accessToken);
+
         return CurlToolkit::request('POST', $url, $menu);
     }
 
