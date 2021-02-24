@@ -34,7 +34,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         ]);
 
         //$this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
-        
+
         //$this->loadMigrationsFrom(__DIR__.'/path/to/migrations');
     }
 

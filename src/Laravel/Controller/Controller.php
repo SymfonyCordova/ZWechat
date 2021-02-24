@@ -43,7 +43,7 @@ abstract class Controller extends BaseController
     /**
      * @return GzhService
      */
-    protected function getGzh()
+    protected function getGzhService()
     {
         return app()->make(GzhService::class);
     }

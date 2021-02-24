@@ -17,7 +17,7 @@ class GzhController extends Controller
 
         $fields = $this->checkRequiredFields($requiredFields, $request->query->all());
 
-        if($this->getGzh()->checkSignature($fields)){
+        if($this->getGzhService()->checkSignature($fields)){
             return $fields['echostr'];
         }
 
