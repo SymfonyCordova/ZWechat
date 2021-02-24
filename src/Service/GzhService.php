@@ -21,11 +21,19 @@ interface GzhService
     const OAUTH2_USER_INFO_URL =
         'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN';
 
+    const GET_JST_TICKET_URL
+        = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
+
+    const GENERATE_SCENE_VALUE_QR_CODE_URL =
+        'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=%s';
+
+    const GENERATE_SCENE_VALUE_QR_CODE_TEMPLATE
+        = '{"action_name": "%s", "action_info": {"scene": {"scene_str": "%s"}}}';
+
+    const SHOW_QR_CODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s';
 
     //const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
 
-
-    const GET_JST_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
 //    const PAY_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 //
 //    const ADD_CUSTOMER_URL = 'https://api.weixin.qq.com/customservice/kfaccount/add?access_token=%s';
@@ -77,4 +85,6 @@ interface GzhService
      * @return mixed
      */
     public function getJsSdkParams($fields);
+
+    public function generateSceneValueQrCode($sceneValue, $actionName = 'QR_LIMIT_STR_SCENE');
 }

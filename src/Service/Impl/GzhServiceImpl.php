@@ -13,12 +13,14 @@ class GzhServiceImpl implements GzhService
     protected $appId;
     protected $appSecret;
     protected $token;
+    protected $accessTokenPath;
 
     public function __construct($fields)
     {
         $this->appId                = $fields['app_id'];
         $this->appSecret            = $fields['app_secret'];
         $this->token                = $fields['token'];
+        $this->accessTokenPath      = __DIR__.'/access_token.txt';
     }
 
     public function checkSignature($fields)
@@ -37,13 +39,26 @@ class GzhServiceImpl implements GzhService
 
     public function getAccessToken()
     {
-        $data = CurlToolkit::request('GET',sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret));
+        $data = json_decode(file_get_contents($this->accessTokenPath), true);
 
-        if(!isset($data['access_token'])){
-            throw new AccessDeniedException("get openid accessToken fail");
+        if($data['access_token'] < time()) {
+            $wx = CurlToolkit::request('GET', sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret));
+
+            if (!isset($wx['access_token'])) {
+                throw new AccessDeniedException("get openid accessToken fail");
+            }
+
+            $fileData['expires_in'] = time() + $wx['expires_in'];
+            $fileData['access_token'] = $wx['access_token'];
+
+            $fp = fopen($this->accessTokenPath, "w");
+            fwrite($fp, json_encode($fileData));
+            fclose($fp);
+
+            return $wx['access_token'];
+        }else{
+            return $data['access_token'];
         }
-
-        return $data['access_token'];
     }
 
     public function getUserInfo($openId)
@@ -123,5 +138,26 @@ class GzhServiceImpl implements GzhService
             'nonceStr'  => $nonceStr,
             'signature' => $signature,
         );
+    }
+
+    public function generateSceneValueQrCode($sceneValue, $actionName = 'QR_LIMIT_STR_SCENE')
+    {
+        if( !in_array($actionName, array('QR_LIMIT_STR_SCENE', 'QR_STR_SCENE')) ){
+            throw new AccessDeniedException('invalid action name');
+        }
+
+        $accessToken = $this->getAccessToken();
+
+        $url = sprintf(self::GENERATE_SCENE_VALUE_QR_CODE_URL, $accessToken);
+
+        $data = sprintf(self::GENERATE_SCENE_VALUE_QR_CODE_TEMPLATE, $actionName, $sceneValue);
+
+        $data = CurlToolkit::request('POST', $url, $data);
+
+        if(!isset($data['ticket'])){
+            throw new AccessDeniedException("generate scene value QrCode ticket fail");
+        }
+
+        return sprintf(self::SHOW_QR_CODE_URL, urldecode($data['ticket']));
     }
 }
