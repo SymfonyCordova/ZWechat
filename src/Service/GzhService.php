@@ -86,7 +86,7 @@ interface GzhService
      * @param string $actionName
      * @return mixed
      */
-    public function generateSceneValueQrCode($sceneValue, $actionName = 'QR_LIMIT_STR_SCENE');
+    public function generateSceneValueQrCode($sceneValue, $returnUrlAddress = true, $actionName = 'QR_LIMIT_STR_SCENE');
 
     /**
      * 解析微信消息

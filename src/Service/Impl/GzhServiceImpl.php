@@ -149,7 +149,7 @@ class GzhServiceImpl implements GzhService
         );
     }
 
-    public function generateSceneValueQrCode($sceneValue, $actionName = 'QR_LIMIT_STR_SCENE')
+    public function generateSceneValueQrCode($sceneValue, $returnUrlAddress = true, $actionName = 'QR_LIMIT_STR_SCENE')
     {
         if( !in_array($actionName, array('QR_LIMIT_STR_SCENE', 'QR_STR_SCENE')) ){
             throw new AccessDeniedException('invalid action name');
@@ -167,7 +167,11 @@ class GzhServiceImpl implements GzhService
             throw new AccessDeniedException("generate scene value QrCode ticket fail");
         }
 
-        return sprintf(self::SHOW_QR_CODE_URL, urldecode($data['ticket']));
+        if($returnUrlAddress){
+            return sprintf(self::SHOW_QR_CODE_URL, urldecode($data['ticket']));
+        }else{
+            return $data['ticket'];
+        }
     }
 
     public function resolveMessage()
@@ -224,8 +228,8 @@ class GzhServiceImpl implements GzhService
         if(!$message){ return $message; }
 
         if( ($pos = stripos($message['EventKey'], 'qrscene_')) === 0 && !$message['Ticket']){
-            $message['scene_value'] = substr($message['EventKey'], $pos);
-
+            $key = explode('_', $message['EventKey']);
+            $message['scene_value'] = $key[1];
             return $message;
         }else{
             return false;
