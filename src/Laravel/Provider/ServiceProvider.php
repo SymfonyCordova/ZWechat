@@ -20,6 +20,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         $this->app->singleton(GzhService::class, function ($app) {
             return new GzhServiceImpl(config('zler-wechat.gzh'));
         });
+        $this->app->make('\Zler\Wechat\Laravel\Controller\GzhController');
     }
 
     /**
