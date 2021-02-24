@@ -33,8 +33,8 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             __DIR__ . '/../config/zler-wechat.php' => config_path('zler-wechat.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
-
+        //$this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
+        
         //$this->loadMigrationsFrom(__DIR__.'/path/to/migrations');
     }
 
