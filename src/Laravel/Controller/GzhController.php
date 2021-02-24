@@ -24,9 +24,7 @@ class GzhController extends Controller
         return $this->createSuccessResponse();
     }
 
-    public function message(Request $request)
-    {
-
+    public function test(){
+        return  "Hello World";
     }
-
 }
