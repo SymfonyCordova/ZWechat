@@ -86,5 +86,26 @@ interface GzhService
      */
     public function getJsSdkParams($fields);
 
+    /**
+     * 生成带参数的二维码
+     * @param $sceneValue
+     * @param string $actionName
+     * @return mixed
+     */
     public function generateSceneValueQrCode($sceneValue, $actionName = 'QR_LIMIT_STR_SCENE');
+
+    /**
+     * 解析微信消息
+     * @return mixed
+     */
+    public function resolveMessage();
+
+    /**
+     * 创建微信消息
+     * @param $fromUsername
+     * @param $toUsername
+     * @param $context
+     * @return mixed
+     */
+    public function createTextMessage($fromUsername, $toUsername, $context);
 }

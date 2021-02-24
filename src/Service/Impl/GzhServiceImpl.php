@@ -160,4 +160,44 @@ class GzhServiceImpl implements GzhService
 
         return sprintf(self::SHOW_QR_CODE_URL, urldecode($data['ticket']));
     }
+
+    public function resolveMessage()
+    {
+        $context = isset($GLOBALS['HTTP_RAW_POST_DATA']) ?
+            $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
+        $context = simplexml_load_string($context);
+
+        return array(
+            //公有部分
+            'ToUserName' => $context->ToUserName,   // 开发者微信号
+            'FromUserName' => $context->FromUserName, // 发送方帐号（一个OpenID）
+            'CreateTime' => $context->CreateTime,
+            'MsgType' => trim($context->MsgType),
+            //私有部分
+            'Content' => isset($context->Content)?trim($context->Content):null,//文本消息内容
+            'MsgId' => isset($context->MsgId)?$context->MsgId:null, //消息id，64位整型
+            'PicUrl' => isset($context->PicUrl)?$context->PicUrl:null, //图片链接（由系统生成)
+            'MediaId' => isset($context->MediaId)?$context->MediaId:null, //消息媒体id
+            'Format' => isset($context->Format)?$context->Format:null, //语音格式
+            'Event' => isset($context->Event)?$context->Event:null,//事件类型
+            'EventKey' => isset($context->EventKey)?$context->EventKey:null,//事件KEY值
+            'Ticket' => isset($context->Ticket)?$context->Ticket:null,//二维码的ticket，可用来换取二维码图片
+        );
+
+    }
+
+    public function createTextMessage($fromUsername, $toUsername, $context)
+    {
+        $template = <<<EOF
+            <xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[%s]]></Content>
+            </xml>
+        EOF;
+
+        return sprintf($template, $toUsername, $fromUsername, time(), $context);
+    }
 }
