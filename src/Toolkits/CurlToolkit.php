@@ -5,7 +5,7 @@ namespace Zler\Wechat\Toolkits;
 
 class CurlToolkit
 {
-    public static function request($method, $url, $params = '', $conditions = array())
+    public static function request($method, $url, $params = null, $conditions = array())
     {
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
@@ -23,38 +23,19 @@ class CurlToolkit
         curl_setopt($curl, CURLOPT_HTTPHEADER, $conditions['header']);
 
         if ($method == 'POST') {
-
             curl_setopt($curl, CURLOPT_POST, 1);
-            //TODO
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-
         } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } elseif ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-            if(!empty($params)){
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } elseif ($method == 'PATCH') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
-            if(isset($params['json']) && $params['json']){
-                unset($params['json']);
-
-                $params = json_encode($params);
-
-//                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-//                    'Content-Type: application/json',
-//                    'Content-Length: ' . strlen($params)
-//                ));
-
-                curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-
-            }elseif(!empty($params)) {
+            if (!empty($params)) {
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }

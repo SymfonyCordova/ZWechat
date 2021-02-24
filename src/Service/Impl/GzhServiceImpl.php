@@ -253,4 +253,12 @@ class GzhServiceImpl implements GzhService
 
         return sprintf($template, $toUsername, $fromUsername, time(), $context);
     }
+
+    public function createMenu($menu)
+    {
+        $accessToken = $this->getAccessToKen();
+        $url = sprintf(self::CREATE_MENU_URL, $accessToken);
+        return CurlToolkit::request('POST', $url, $menu);
+    }
+
 }

@@ -128,4 +128,11 @@ interface GzhService
      * @return mixed
      */
     public function createTextMessage($fromUsername, $toUsername, $context);
+
+    /**
+     * 创建菜单
+     * @param $menu
+     * @return mixed
+     */
+    public function createMenu($menu);
 }
