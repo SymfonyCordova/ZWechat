@@ -10,10 +10,11 @@ use Zler\Wechat\Toolkits\StringToolkit;
 
 class GzhServiceImpl implements GzhService
 {
-    protected $appId;
-    protected $appSecret;
-    protected $token;
-    protected $accessTokenPath;
+    private $appId;
+    private $appSecret;
+    private $token;
+    private $accessTokenPath;
+    private $resolveMessages = array();
 
     public function __construct($fields)
     {
@@ -21,6 +22,7 @@ class GzhServiceImpl implements GzhService
         $this->appSecret            = $fields['app_secret'];
         $this->token                = $fields['token'];
         $this->accessTokenPath      = __DIR__.'/access_token.txt';
+        $this->resolveMessages      = array();
     }
 
     public function checkSignature($fields)
@@ -167,7 +169,7 @@ class GzhServiceImpl implements GzhService
             $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
         $context = simplexml_load_string($context);
 
-        return array(
+        $this->resolveMessages = array(
             //公有部分
             'ToUserName' => $context->ToUserName,   // 开发者微信号
             'FromUserName' => $context->FromUserName, // 发送方帐号（一个OpenID）
@@ -184,6 +186,57 @@ class GzhServiceImpl implements GzhService
             'Ticket' => isset($context->Ticket)?$context->Ticket:null,//二维码的ticket，可用来换取二维码图片
         );
 
+    }
+
+    public function hasResolveSubscribeEvent()
+    {
+        $message = $this->resolveMessages;
+
+        if($message['MsgType'] === 'event' && $message['Event'] === 'subscribe'){
+            return $message;
+        }else{
+            return false;
+        }
+    }
+
+    public function hasResolveUnSubscribeEvent()
+    {
+        $message = $this->resolveMessages;
+
+        if($message['MsgType'] === 'event' && $message['Event'] === 'unsubscribe'){
+            return $message;
+        }else{
+            return false;
+        }
+    }
+
+    public function hasResolveScanUnsubscribedEvent()
+    {
+        $message = $this->hasResolveSubscribeEvent();
+
+        if(!$message){ return $message; }
+
+        if( ($pos = stripos($message['EventKey'], 'qrscene_')) === 0 && !$message['Ticket']){
+            $message['scene_value'] = substr($message['EventKey'], $pos);
+
+            return $message;
+        }else{
+            return false;
+        }
+    }
+
+    public function hasResolveScanSubscribedEvent()
+    {
+        $message = $this->resolveMessages;
+
+        if($message['MsgType'] === 'event' && $message['Event'] === 'SCAN'
+            && !$message['EventKey'] && !$message['Ticket']){
+            $message['scene_value'] = $message['EventKey'];
+
+            return $message;
+        }else{
+            return false;
+        }
     }
 
     public function createTextMessage($fromUsername, $toUsername, $context)

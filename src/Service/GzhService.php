@@ -32,17 +32,11 @@ interface GzhService
 
     const SHOW_QR_CODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s';
 
-    //const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
+    const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
 
 //    const PAY_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-//
 //    const ADD_CUSTOMER_URL = 'https://api.weixin.qq.com/customservice/kfaccount/add?access_token=%s';
 //    const CUSTOMER_SEND_MESSAGE_URL = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=%s';
-
-    const EVENT = 'event';
-    const EVENT_SUBSCRIBE = 'subscribe';
-    const EVENT_UNSUBSCRIBE = 'unsubscribe';
-    const EVENT_CLICK = 'CLICK';
 
     /**
      * 公众号验证开发者服务器token
@@ -99,6 +93,32 @@ interface GzhService
      * @return mixed
      */
     public function resolveMessage();
+
+    /**
+     * 是否是关注事件
+     * @return boolean|array
+     */
+    public function hasResolveSubscribeEvent();
+
+    /**
+     * 是否是取消关注事件
+     * @return mixed
+     */
+    public function hasResolveUnSubscribeEvent();
+
+    /**
+     * 用户已关注时的事件推送
+     *
+     * @return mixed
+     */
+    public function hasResolveScanSubscribedEvent();
+
+    /**
+     * 用户未关注时，进行关注后的事件推送
+     *
+     * @return mixed
+     */
+    public function hasResolveScanUnsubscribedEvent();
 
     /**
      * 创建微信消息
