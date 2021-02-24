@@ -4,18 +4,13 @@
 namespace Zler\Wechat\Laravel\Controller;
 
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 use Zler\Wechat\Exception\InvalidArgumentException;
 use Zler\Wechat\Service\GzhService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
     protected function checkRequiredFields($requiredFields, $requestData)
     {
         $requestFields = array_keys($requestData);
