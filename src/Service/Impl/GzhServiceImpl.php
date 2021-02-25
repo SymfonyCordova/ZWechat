@@ -298,6 +298,11 @@ class GzhServiceImpl implements GzhService
     private function createFiles()
     {
         $filesystem = new Filesystem();
-        $filesystem->exists(array($this->jsTicketPath, $this->accessTokenPath));
+        $files = array($this->jsTicketPath, $this->accessTokenPath);
+        if($filesystem->exists()){
+            foreach ($files as $file){
+                $filesystem->chmod($file, 0700, 0000, true);
+            }
+        }
     }
 }
