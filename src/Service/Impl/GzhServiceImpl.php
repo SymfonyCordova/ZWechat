@@ -3,6 +3,7 @@
 
 namespace Zler\Wechat\Service\Impl;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Zler\Wechat\Exception\AccessDeniedException;
 use Zler\Wechat\Service\GzhService;
 use Zler\Wechat\Toolkits\CurlToolkit;
@@ -14,6 +15,7 @@ class GzhServiceImpl implements GzhService
     private $appSecret;
     private $token;
     private $accessTokenPath;
+    private $jsTicketPath;
     private $resolveMessages = array();
 
     public function __construct($fields)
@@ -24,6 +26,8 @@ class GzhServiceImpl implements GzhService
         $this->accessTokenPath      = __DIR__.'/access_token.txt';
         $this->jsTicketPath         = __DIR__.'/js_ticket.txt';
         $this->resolveMessages      = array();
+
+        $this->createFiles();
     }
 
     public function checkSignature($fields)
@@ -56,9 +60,11 @@ class GzhServiceImpl implements GzhService
             $fileData['expires_in'] = time() + $wx['expires_in'];
             $fileData['access_token'] = $wx['access_token'];
 
-            $fp = fopen($this->accessTokenPath, "w");
-            fwrite($fp, json_encode($fileData));
-            fclose($fp);
+            $filesystem = new Filesystem();
+            $filesystem->dumpFile($this->accessTokenPath, json_encode($fileData));
+//            $fp = fopen($this->accessTokenPath, "w");
+//            fwrite($fp, json_encode($fileData));
+//            fclose($fp);
 
             return $wx['access_token'];
         }else{
@@ -136,9 +142,11 @@ class GzhServiceImpl implements GzhService
             $fileData['expires_in'] = time() + $wx['expires_in'];
             $fileData['ticket'] = $wx['ticket'];
 
-            $fp = fopen($this->jsTicketPath, "w");
-            fwrite($fp, json_encode($fileData));
-            fclose($fp);
+            $filesystem = new Filesystem();
+            $filesystem->dumpFile($this->accessTokenPath, json_encode($fileData));
+//            $fp = fopen($this->jsTicketPath, "w");
+//            fwrite($fp, json_encode($fileData));
+//            fclose($fp);
 
             return $wx['ticket'];
         }else{
@@ -287,4 +295,9 @@ class GzhServiceImpl implements GzhService
         return CurlToolkit::request('POST', $url, $menu);
     }
 
+    private function createFiles()
+    {
+        $filesystem = new Filesystem();
+        $filesystem->exists(array($this->jsTicketPath, $this->accessTokenPath));
+    }
 }

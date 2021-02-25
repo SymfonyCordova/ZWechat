@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "php": "^7.3",
-        "pimple/pimple": "3.3.1"
+        "pimple/pimple": "3.3.1",
+        "symfony/filesystem": "^4.4.19"
     },
     "require-dev": {
         "php": "^7.3",
