@@ -22,6 +22,7 @@ class GzhServiceImpl implements GzhService
         $this->appSecret            = $fields['app_secret'];
         $this->token                = $fields['token'];
         $this->accessTokenPath      = __DIR__.'/access_token.txt';
+        $this->jsTicketPath         = __DIR__.'/js_ticket.txt';
         $this->resolveMessages      = array();
     }
 
@@ -116,21 +117,33 @@ class GzhServiceImpl implements GzhService
 
     public function getJsTikcet()
     {
-        $accessToken = $this->getAccessToKen();
+        $data = json_decode(file_get_contents($this->jsTicketPath), true);
 
-        $url = sprintf(self::GET_JST_TICKET_URL, $accessToken);
+        if($data['ticket'] < time()) {
+            $accessToken = $this->getAccessToKen();
 
-        $data = CurlToolkit::request('GET', $url, array());
+            $url = sprintf(self::GET_JST_TICKET_URL, $accessToken);
+            $wx = CurlToolkit::request('GET', $url, array());
 
-        if(!isset($data['errcode'])){
-            throw new AccessDeniedException("get js tikcet fail no errcode");
+            if(!isset($wx['errcode'])){
+                throw new AccessDeniedException("get js tikcet fail no errcode");
+            }
+
+            if($wx['errcode'] != 0){
+                throw new AccessDeniedException("get js tikcet fail");
+            }
+
+            $fileData['expires_in'] = time() + $wx['expires_in'];
+            $fileData['ticket'] = $wx['ticket'];
+
+            $fp = fopen($this->jsTicketPath, "w");
+            fwrite($fp, json_encode($fileData));
+            fclose($fp);
+
+            return $wx['ticket'];
+        }else{
+            return $data['ticket'];
         }
-
-        if($data['errcode'] != 0){
-            throw new AccessDeniedException("get js tikcet fail");
-        }
-
-        return $data['ticket'];
     }
 
     public function getJsSdkParams($fields)
