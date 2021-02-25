@@ -60,9 +60,6 @@ class GzhServiceImpl implements GzhService
 
             $filesystem = new Filesystem();
             $filesystem->dumpFile($this->accessTokenPath, json_encode($fileData));
-//            $fp = fopen($this->accessTokenPath, "w");
-//            fwrite($fp, json_encode($fileData));
-//            fclose($fp);
 
             return $wx['access_token'];
         }else{
@@ -141,10 +138,7 @@ class GzhServiceImpl implements GzhService
             $fileData['ticket'] = $wx['ticket'];
 
             $filesystem = new Filesystem();
-            $filesystem->dumpFile($this->accessTokenPath, json_encode($fileData));
-//            $fp = fopen($this->jsTicketPath, "w");
-//            fwrite($fp, json_encode($fileData));
-//            fclose($fp);
+            $filesystem->dumpFile($this->jsTicketPath, json_encode($fileData));
 
             return $wx['ticket'];
         }else{
