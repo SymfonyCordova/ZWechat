@@ -299,7 +299,7 @@ class GzhServiceImpl implements GzhService
     {
         $filesystem = new Filesystem();
         $files = array($this->jsTicketPath, $this->accessTokenPath);
-        if($filesystem->exists()){
+        if($filesystem->exists($files)){
             foreach ($files as $file){
                 $filesystem->chmod($file, 0700, 0000, true);
             }
