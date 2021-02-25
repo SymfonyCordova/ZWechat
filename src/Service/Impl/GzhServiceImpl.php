@@ -46,7 +46,7 @@ class GzhServiceImpl implements GzhService
     {
         $data = json_decode(file_get_contents($this->accessTokenPath), true);
 
-        if($data['access_token'] < time()) {
+        if($data['expires_in'] < time()) {
             $wx = CurlToolkit::request('GET',
                                 sprintf(self::GET_ACCESS_TOKEN_URL, $this->appId, $this->appSecret),
                                 array());
@@ -120,7 +120,7 @@ class GzhServiceImpl implements GzhService
     {
         $data = json_decode(file_get_contents($this->jsTicketPath), true);
 
-        if($data['ticket'] < time()) {
+        if($data['expires_in'] < time()) {
             $accessToken = $this->getAccessToKen();
 
             $url = sprintf(self::GET_JST_TICKET_URL, $accessToken);
