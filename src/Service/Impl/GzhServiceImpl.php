@@ -23,11 +23,9 @@ class GzhServiceImpl implements GzhService
         $this->appId                = $fields['app_id'];
         $this->appSecret            = $fields['app_secret'];
         $this->token                = $fields['token'];
-        $this->accessTokenPath      = __DIR__.'/access_token.txt';
-        $this->jsTicketPath         = __DIR__.'/js_ticket.txt';
+        $this->accessTokenPath      = $fields['access_token_path'];
+        $this->jsTicketPath         = $fields['js_ticket_path'];
         $this->resolveMessages      = array();
-
-        $this->createFiles();
     }
 
     public function checkSignature($fields)
@@ -293,16 +291,5 @@ class GzhServiceImpl implements GzhService
         $url = sprintf(self::CREATE_MENU_URL, $accessToken);
 
         return CurlToolkit::request('POST', $url, $menu);
-    }
-
-    private function createFiles()
-    {
-        $filesystem = new Filesystem();
-        $files = array($this->jsTicketPath, $this->accessTokenPath);
-        if($filesystem->exists($files)){
-            foreach ($files as $file){
-                $filesystem->chmod($file, 0700, 0000, true);
-            }
-        }
     }
 }
