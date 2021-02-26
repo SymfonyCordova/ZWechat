@@ -244,7 +244,7 @@ class GzhServiceImpl implements GzhService
 
         if(!$message){ return $message; }
 
-        if( ($pos = stripos($message['EventKey'], 'qrscene_')) == 0 && !$message['Ticket']){
+        if( ($pos = stripos($message['EventKey'], 'qrscene_')) === 0 && $message['Ticket']){
             $key = explode('_', $message['EventKey']);
             $message['scene_value'] = $key[1];
             return $message;
