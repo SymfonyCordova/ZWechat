@@ -198,7 +198,7 @@ class GzhServiceImpl implements GzhService
             $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
         $context = simplexml_load_string($context);
 
-        $this->resolveMessages = array(
+        return $this->resolveMessages = array(
             //公有部分
             'ToUserName' => $context->ToUserName,   // 开发者微信号
             'FromUserName' => $context->FromUserName, // 发送方帐号（一个OpenID）
