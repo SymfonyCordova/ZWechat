@@ -30,7 +30,7 @@ class GzhServiceImpl implements GzhService
 
     public function getResolveMessages()
     {
-        return $this->resolveMessage();
+        return $this->resolveMessages;
     }
 
     public function checkSignature($fields)
@@ -214,12 +214,11 @@ class GzhServiceImpl implements GzhService
             'EventKey' => isset($context->EventKey)?$context->EventKey:null,//事件KEY值
             'Ticket' => isset($context->Ticket)?$context->Ticket:null,//二维码的ticket，可用来换取二维码图片
         );
-
     }
 
     public function hasResolveSubscribeEvent()
     {
-        $message = $this->resolveMessages;
+        $message = $this->getResolveMessages();
 
         if($message['MsgType'] === 'event' && $message['Event'] === 'subscribe'){
             return $message;
@@ -230,7 +229,7 @@ class GzhServiceImpl implements GzhService
 
     public function hasResolveUnSubscribeEvent()
     {
-        $message = $this->resolveMessages;
+        $message = $this->getResolveMessages();
 
         if($message['MsgType'] === 'event' && $message['Event'] === 'unsubscribe'){
             return $message;
@@ -256,7 +255,7 @@ class GzhServiceImpl implements GzhService
 
     public function hasResolveScanSubscribedEvent()
     {
-        $message = $this->resolveMessages;
+        $message = $this->getResolveMessages();
 
         if($message['MsgType'] === 'event' && $message['Event'] === 'SCAN'
             && !$message['EventKey'] && !$message['Ticket']){
