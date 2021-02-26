@@ -216,9 +216,9 @@ class GzhServiceImpl implements GzhService
         );
     }
 
-    public function hasResolveSubscribeEvent($message)
+    public function hasResolveSubscribeEvent()
     {
-        //$message = $this->getResolveMessages();
+        $message = $this->getResolveMessages();
 
         if($message['MsgType'] === 'event' && $message['Event'] === 'subscribe'){
             return $message;
@@ -231,7 +231,7 @@ class GzhServiceImpl implements GzhService
     {
         $message = $this->getResolveMessages();
 
-        if($message['MsgType'] === 'event' && $message['Event'] === 'unsubscribe'){
+        if($message['MsgType'] == 'event' && $message['Event'] == 'unsubscribe'){
             return $message;
         }else{
             return false;
@@ -244,7 +244,7 @@ class GzhServiceImpl implements GzhService
 
         if(!$message){ return $message; }
 
-        if( ($pos = stripos($message['EventKey'], 'qrscene_')) === 0 && !$message['Ticket']){
+        if( ($pos = stripos($message['EventKey'], 'qrscene_')) == 0 && !$message['Ticket']){
             $key = explode('_', $message['EventKey']);
             $message['scene_value'] = $key[1];
             return $message;
@@ -257,7 +257,7 @@ class GzhServiceImpl implements GzhService
     {
         $message = $this->getResolveMessages();
 
-        if($message['MsgType'] === 'event' && $message['Event'] === 'SCAN'
+        if($message['MsgType'] == 'event' && $message['Event'] == 'SCAN'
             && !$message['EventKey'] && !$message['Ticket']){
             $message['scene_value'] = $message['EventKey'];
 
