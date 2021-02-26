@@ -201,7 +201,7 @@ class GzhServiceImpl implements GzhService
         $this->resolveMessages = array(
             //公有部分
             'ToUserName' => $context->ToUserName,   // 开发者微信号
-            'FromUserName' => $context->FromUserName->SimpleXMLElement, // 发送方帐号（一个OpenID）
+            'FromUserName' => $context->FromUserName, // 发送方帐号（一个OpenID）
             'CreateTime' => $context->CreateTime,
             'MsgType' => trim($context->MsgType),
             //私有部分
