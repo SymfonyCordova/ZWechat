@@ -196,8 +196,7 @@ class GzhServiceImpl implements GzhService
     {
         $context = isset($GLOBALS['HTTP_RAW_POST_DATA']) ?
             $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
-        libxml_disable_entity_loader(true);
-        $context = simplexml_load_string($context,'SimpleXMLElement', LIBXML_NOCDATA);
+        $context = simplexml_load_string($context);
 
         $this->resolveMessages = array(
             //公有部分
