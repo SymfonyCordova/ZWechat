@@ -223,7 +223,7 @@ class GzhServiceImpl implements GzhService
         if($message['MsgType'] === 'event' && $message['Event'] === 'subscribe'){
             return $message;
         }else{
-            return false;
+            return array();
         }
     }
 
