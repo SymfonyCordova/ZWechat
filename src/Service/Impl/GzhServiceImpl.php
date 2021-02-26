@@ -28,6 +28,11 @@ class GzhServiceImpl implements GzhService
         $this->resolveMessages      = array();
     }
 
+    public function getResolveMessages()
+    {
+        return $this->resolveMessage();
+    }
+
     public function checkSignature($fields)
     {
         $tmpArr = array($this->token, $fields['timestamp'], $fields['nonce']);

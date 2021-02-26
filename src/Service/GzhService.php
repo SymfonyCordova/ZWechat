@@ -120,6 +120,8 @@ interface GzhService
      */
     public function hasResolveScanUnsubscribedEvent();
 
+    public function getResolveMessages();
+
     /**
      * 创建微信消息
      * @param $fromUsername
