@@ -216,9 +216,9 @@ class GzhServiceImpl implements GzhService
         );
     }
 
-    public function hasResolveSubscribeEvent()
+    public function hasResolveSubscribeEvent($message)
     {
-        $message = $this->getResolveMessages();
+        //$message = $this->getResolveMessages();
 
         if($message['MsgType'] === 'event' && $message['Event'] === 'subscribe'){
             return $message;

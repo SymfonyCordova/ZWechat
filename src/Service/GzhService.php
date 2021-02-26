@@ -96,9 +96,10 @@ interface GzhService
 
     /**
      * 是否是关注事件
+     * @param array
      * @return boolean|array
      */
-    public function hasResolveSubscribeEvent();
+    public function hasResolveSubscribeEvent($message);
 
     /**
      * 是否是取消关注事件
