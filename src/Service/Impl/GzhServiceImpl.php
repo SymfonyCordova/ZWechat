@@ -258,9 +258,8 @@ class GzhServiceImpl implements GzhService
         $message = $this->getResolveMessages();
 
         if($message['MsgType'] == 'event' && $message['Event'] == 'SCAN'
-            && !$message['EventKey'] && !$message['Ticket']){
+            && $message['EventKey'] && $message['Ticket']){
             $message['scene_value'] = $message['EventKey'];
-
             return $message;
         }else{
             return false;
