@@ -34,6 +34,12 @@ interface GzhService
 
     const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
 
+    const GET_TEMPLATE_ID_URL =
+        'https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=%s';
+
+    const SEND_TEMPLATE_MESSAGE_URL =
+        'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s';
+
 //    const PAY_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 //    const ADD_CUSTOMER_URL = 'https://api.weixin.qq.com/customservice/kfaccount/add?access_token=%s';
 //    const CUSTOMER_SEND_MESSAGE_URL = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=%s';
@@ -138,4 +144,21 @@ interface GzhService
      * @return mixed
      */
     public function createMenu($menu);
+
+    /**
+     * 获得模板ID
+     * @param $tmId  微信公众号官方后台模板库中模板的编号
+     * @return mixed
+     */
+    public function getTemplateId($tmId);
+
+    /**
+     * @param $tmId 后台模版Id
+     * @param $openId 接收者openid
+     * @param $data 模板数据
+     * @param null $url 跳转URL
+     * @param array $miniprogram 小程序配置
+     * @return array|false|mixed|string
+     */
+    public function sendTemplateMessage($tmId, $openId, $data, $url=null, $miniprogram=array());
 }

@@ -4,6 +4,7 @@
 namespace Zler\Wechat\Service\Impl;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Zler\Wechat\Common\ArrayToolkit;
 use Zler\Wechat\Exception\AccessDeniedException;
 use Zler\Wechat\Service\GzhService;
 use Zler\Wechat\Toolkits\CurlToolkit;
@@ -288,5 +289,57 @@ class GzhServiceImpl implements GzhService
         $url = sprintf(self::CREATE_MENU_URL, $accessToken);
 
         return CurlToolkit::request('POST', $url, $menu);
+    }
+
+    public function getTemplateId($tmId)
+    {
+        $accessToken = $this->getAccessToKen();
+
+        $url = sprintf(self::GET_TEMPLATE_ID_URL, $accessToken);
+
+        $params = '{"template_id_short":"%s"}';
+
+        $params = sprintf($params, $tmId);
+
+        $data = CurlToolkit::request('POST', $url, $params);
+
+        if(!isset($data['errcode']) || $data['errcode']!=0 || !isset($data['template_id'])){
+            throw new AccessDeniedException('get template id failed!');
+        }
+
+        return $data['template_id'];
+    }
+
+    public function sendTemplateMessage($tmId, $openId, $data, $url = null, $miniprogram = array())
+    {
+        $templateId = $this->getTemplateId($tmId);
+
+        $accessToken = $this->getAccessToKen();
+        $url = sprintf(self::SEND_TEMPLATE_MESSAGE_URL, $accessToken);
+
+        $params = array(
+            'touser' => $openId,
+            'template_id' => $templateId,
+            'data' => $data,
+        );
+
+        if($url){
+            $params['url'] = $url;
+        }
+
+        if($miniprogram){
+            $requiredFields = array(
+                'appid',
+                'pagepath',
+            );
+
+            if(!ArrayToolkit::requires($miniprogram, $requiredFields)){
+                throw new AccessDeniedException('miniprogram 缺少必要的字段');
+            }
+
+            $params['miniprogram']  = ArrayToolkit::parts($miniprogram, $requiredFields);
+        }
+
+        return CurlToolkit::request('POST', $url, json_encode($params));
     }
 }
