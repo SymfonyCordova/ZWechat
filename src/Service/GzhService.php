@@ -30,9 +30,11 @@ interface GzhService
     const GENERATE_SCENE_VALUE_QR_CODE_TEMPLATE
         = '{"action_name": "%s", "action_info": {"scene": {"scene_str": "%s"}}}';
 
-    const SHOW_QR_CODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s';
+    const SHOW_QR_CODE_URL =
+        'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s';
 
-    const CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
+    const CREATE_MENU_URL =
+        "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
 
     const GET_TEMPLATE_ID_URL =
         'https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=%s';
